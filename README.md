@@ -1,4 +1,8 @@
-# Webtechprojekt
+[![CI](https://github.com/DangKhanhLe/webtechprojekt/actions/workflows/tests.yml/badge.svg)](https://github.com/DangKhanhLe/webtechprojekt/actions/workflows/tests.yml)
+
+# ReadMe
+
+## Webtechprojekt
 
 ### Projekt-Thema: To-Do-Liste
 - Basic features: mehrere Listen erstellen können und Erinnerungen setzen (evtl. mit Kalender Funktion)
