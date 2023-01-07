@@ -5,11 +5,13 @@ import java.util.List;
 public class ToDoList {
 
     private Long id;
-    private Task task;
+    private String title;
+    private String description;
 
-    public ToDoList(Long id, Task task) {
+    public ToDoList(Long id, String title, String description) {
         this.id = id;
-        this.task = task;
+        this.title = title;
+        this.description = description;
     }
 
     public Long getId() {
@@ -20,11 +22,19 @@ public class ToDoList {
         this.id = id;
     }
 
-    public Task getTask() {
-        return task;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTask(Task task) {
-        this.task = task;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

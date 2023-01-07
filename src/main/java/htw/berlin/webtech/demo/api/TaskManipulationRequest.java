@@ -7,17 +7,16 @@ public class TaskManipulationRequest {
     private String title;
     private LocalDate dueDate;
     private boolean completed;
+    private Long toDoListId;
 
-    public TaskManipulationRequest(String title, LocalDate dueDate, boolean completed) {
+    public TaskManipulationRequest(String title, LocalDate dueDate, boolean completed, Long toDoListId) {
         this.title = title;
         this.dueDate = dueDate;
         this.completed = completed;
+        this.toDoListId = toDoListId;
     }
 
-    public TaskManipulationRequest(String title, boolean completed) {
-        this.title = title;
-        this.completed = completed;
-    }
+    public TaskManipulationRequest() {}
 
     public String getTitle() {
         return title;
@@ -41,5 +40,13 @@ public class TaskManipulationRequest {
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
+    }
+
+    public Long getToDoListId() {
+        return toDoListId;
+    }
+
+    public void setToDoListId(Long toDoListId) {
+        this.toDoListId = toDoListId;
     }
 }

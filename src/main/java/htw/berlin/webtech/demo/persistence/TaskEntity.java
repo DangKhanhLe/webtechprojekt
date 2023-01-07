@@ -8,27 +8,27 @@ public class TaskEntity {
 
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "Id")
     private Long id;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "Title", nullable = false)
     private String title;
 
-    @Column(name = "dueDate")
+    @Column(name = "DueDate", nullable = false)
     private LocalDate dueDate;
 
-    @Column(name = "completed", nullable = false)
+    @Column(name = "Completed", nullable = false)
     private boolean completed;
 
-    public TaskEntity(String title, LocalDate dueDate, boolean completed) {
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JoinColumn(name = "toDoList_id", referencedColumnName = "Id")
+    private ToDoListEntity toDoListEntity;
+
+    public TaskEntity(String title, LocalDate dueDate, boolean completed, ToDoListEntity toDoListEntity) {
         this.title = title;
         this.dueDate = dueDate;
         this.completed = completed;
-    }
-
-    public TaskEntity(String title, boolean completed) {
-        this.title = title;
-        this.completed = completed;
+        this.toDoListEntity = toDoListEntity;
     }
 
     protected TaskEntity() {}
@@ -59,5 +59,13 @@ public class TaskEntity {
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
+    }
+
+    public ToDoListEntity getToDoListEntity() {
+        return toDoListEntity;
+    }
+
+    public void setToDoListEntity(ToDoListEntity toDoListEntity) {
+        this.toDoListEntity = toDoListEntity;
     }
 }

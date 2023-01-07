@@ -44,7 +44,7 @@ public class TaskRestController {
     }
 
     @DeleteMapping(path = "/api/v1/tasks/{id}")
-    public ResponseEntity<Void> deletePerson(@PathVariable Long id){
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id){
         boolean successful = taskService.deleteById(id);
         return successful? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }

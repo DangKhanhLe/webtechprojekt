@@ -1,11 +1,10 @@
 package htw.berlin.webtech.demo.service;
 
-import htw.berlin.webtech.demo.api.Person;
 import htw.berlin.webtech.demo.api.Task;
 import htw.berlin.webtech.demo.api.TaskManipulationRequest;
-import htw.berlin.webtech.demo.persistence.PersonEntity;
 import htw.berlin.webtech.demo.persistence.TaskEntity;
 import htw.berlin.webtech.demo.persistence.TaskRepository;
+import htw.berlin.webtech.demo.persistence.ToDoListRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,9 +14,11 @@ import java.util.stream.Collectors;
 public class TaskService {
 
     private final TaskRepository taskRepository;
+    private final ToDoListRepository toDoListRepository;
 
-    public TaskService(TaskRepository taskRepository) {
+    public TaskService(TaskRepository taskRepository, ToDoListRepository toDoListRepository) {
         this.taskRepository = taskRepository;
+        this.toDoListRepository = toDoListRepository;
     }
 
     public List<Task> findAll(){
@@ -33,7 +34,8 @@ public class TaskService {
     }
 
     public Task create(TaskManipulationRequest request){
-        var taskEntity = new TaskEntity(request.getTitle(), request.getDueDate(), request.isCompleted());
+        var toDoList = request.getToDoListId() != null ? toDoListRepository.findById(request.getToDoListId()).orElseThrow() : null;
+        var taskEntity = new TaskEntity(request.getTitle(), request.getDueDate(), request.isCompleted(), toDoList);
         taskEntity = taskRepository.save(taskEntity);
         return transformEntity(taskEntity);
     }
@@ -48,6 +50,14 @@ public class TaskService {
         taskEntity.setTitle(request.getTitle());
         taskEntity.setDueDate(request.getDueDate());
         taskEntity.setCompleted(request.isCompleted());
+
+        var toDoListId = request.getToDoListId() != null ? request.getToDoListId() : null;
+        if (toDoListId != null){
+            taskEntity.setToDoListEntity(toDoListRepository.findById(toDoListId).orElseThrow());
+        } else {
+            taskEntity.setToDoListEntity(null);
+        }
+
         taskEntity = taskRepository.save(taskEntity);
 
         return transformEntity(taskEntity);
@@ -63,11 +73,13 @@ public class TaskService {
     }
 
     private Task transformEntity(TaskEntity taskEntity){
+        var toDoListId = taskEntity.getToDoListEntity() != null ? taskEntity.getToDoListEntity().getId() : null;
         return new Task(
                 taskEntity.getId(),
                 taskEntity.getTitle(),
                 taskEntity.getDueDate(),
-                taskEntity.isCompleted()
+                taskEntity.isCompleted(),
+                toDoListId
         );
     }
 

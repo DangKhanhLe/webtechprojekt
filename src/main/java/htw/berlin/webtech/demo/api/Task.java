@@ -1,25 +1,25 @@
 package htw.berlin.webtech.demo.api;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDate;
 
 public class Task {
 
     private long id;
     private String title;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dueDate;
     private boolean completed;
+    private Long toDoListId;
 
-    public Task(long id, String title, boolean completed) {
-        this.id = id;
-        this.title = title;
-        this.completed = completed;
-    }
 
-    public Task(long id, String title, LocalDate dueDate, boolean completed) {
+    public Task(long id, String title, LocalDate dueDate, boolean completed, Long toDoListId) {
         this.id = id;
         this.title = title;
         this.dueDate = dueDate;
         this.completed = completed;
+        this.toDoListId = toDoListId;
     }
 
     public long getId() {
@@ -52,5 +52,13 @@ public class Task {
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
+    }
+
+    public Long getToDoListId() {
+        return toDoListId;
+    }
+
+    public void setToDoListId(Long toDoListId) {
+        this.toDoListId = toDoListId;
     }
 }
