@@ -1,8 +1,6 @@
 package htw.berlin.webtech.demo.Service;
 
-import htw.berlin.webtech.demo.persistence.TaskEntity;
 import htw.berlin.webtech.demo.persistence.ToDoListEntity;
-import htw.berlin.webtech.demo.service.TaskTransformer;
 import htw.berlin.webtech.demo.service.ToDoListTransformer;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.DisplayName;
