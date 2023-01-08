@@ -15,29 +15,31 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
     private final ToDoListRepository toDoListRepository;
+    private final TaskTransformer taskTransformer;
 
-    public TaskService(TaskRepository taskRepository, ToDoListRepository toDoListRepository) {
+    public TaskService(TaskRepository taskRepository, ToDoListRepository toDoListRepository, TaskTransformer taskTransformer) {
         this.taskRepository = taskRepository;
         this.toDoListRepository = toDoListRepository;
+        this.taskTransformer = taskTransformer;
     }
 
     public List<Task> findAll(){
         List<TaskEntity> tasks = taskRepository.findAll();
         return tasks.stream()
-                .map(this::transformEntity)
+                .map(taskTransformer::transformEntity)
                 .collect(Collectors.toList());
     }
 
     public Task findById(Long id){
         var taskEntity = taskRepository.findById(id);
-        return taskEntity.map(this::transformEntity).orElse(null);
+        return taskEntity.map(taskTransformer::transformEntity).orElse(null);
     }
 
     public Task create(TaskManipulationRequest request){
         var toDoList = request.getToDoListId() != null ? toDoListRepository.findById(request.getToDoListId()).orElseThrow() : null;
         var taskEntity = new TaskEntity(request.getTitle(), request.getDueDate(), request.isCompleted(), toDoList);
         taskEntity = taskRepository.save(taskEntity);
-        return transformEntity(taskEntity);
+        return taskTransformer.transformEntity(taskEntity);
     }
 
     public Task update(Long id, TaskManipulationRequest request){
@@ -60,7 +62,7 @@ public class TaskService {
 
         taskEntity = taskRepository.save(taskEntity);
 
-        return transformEntity(taskEntity);
+        return taskTransformer.transformEntity(taskEntity);
     }
 
     public boolean deleteById(Long id){
@@ -70,17 +72,6 @@ public class TaskService {
 
         taskRepository.deleteById(id);
         return true;
-    }
-
-    private Task transformEntity(TaskEntity taskEntity){
-        var toDoListId = taskEntity.getToDoListEntity() != null ? taskEntity.getToDoListEntity().getId() : null;
-        return new Task(
-                taskEntity.getId(),
-                taskEntity.getTitle(),
-                taskEntity.getDueDate(),
-                taskEntity.isCompleted(),
-                toDoListId
-        );
     }
 
 }

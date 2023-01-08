@@ -13,27 +13,29 @@ import java.util.stream.Collectors;
 public class ToDoListService {
 
     private final ToDoListRepository toDoListRepository;
+    private final ToDoListTransformer toDoListTransformer;
 
-    public ToDoListService(ToDoListRepository toDoListRepository) {
+    public ToDoListService(ToDoListRepository toDoListRepository, ToDoListTransformer toDoListTransformer) {
         this.toDoListRepository = toDoListRepository;
+        this.toDoListTransformer = toDoListTransformer;
     }
 
     public List<ToDoList> findAll() {
         List<ToDoListEntity> toDoLists = toDoListRepository.findAll();
         return toDoLists.stream()
-                .map(this::transformEntity)
+                .map(toDoListTransformer::transformEntity)
                 .collect(Collectors.toList());
     }
 
     public ToDoList findById(Long id){
         var toDoListEntity = toDoListRepository.findById(id);
-        return toDoListEntity.map(this::transformEntity).orElse(null);
+        return toDoListEntity.map(toDoListTransformer::transformEntity).orElse(null);
     }
 
     public ToDoList create(ToDoListManipulationRequest request){
         var toDoListEntity = new ToDoListEntity(request.getTitle(), request.getDescription());
         toDoListEntity = toDoListRepository.save(toDoListEntity);
-        return transformEntity(toDoListEntity);
+        return toDoListTransformer.transformEntity(toDoListEntity);
     }
 
     public ToDoList update(Long id, ToDoListManipulationRequest request){
@@ -47,7 +49,7 @@ public class ToDoListService {
         toDoListEntity.setDescription(request.getDescription());
         toDoListEntity = toDoListRepository.save(toDoListEntity);
 
-        return transformEntity(toDoListEntity);
+        return toDoListTransformer.transformEntity(toDoListEntity);
     }
 
     public boolean deleteById(Long id){
@@ -57,14 +59,6 @@ public class ToDoListService {
 
         toDoListRepository.deleteById(id);
         return true;
-    }
-
-    private ToDoList transformEntity(ToDoListEntity toDoListEntity){
-        return new ToDoList(
-                toDoListEntity.getId(),
-                toDoListEntity.getTitle(),
-                toDoListEntity.getDescription()
-        );
     }
 
 }
