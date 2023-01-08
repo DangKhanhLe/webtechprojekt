@@ -12,7 +12,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -40,8 +39,7 @@ public class ToDoListRestControllerTest {
                 new ToDoList(1L, "ToDoList1", "Number1"),
                 new ToDoList(2L, "ToDoList2", "Number2")
         );
-//        doReturn(toDoLists).when(toDoListService).findAll();
-        when(toDoListService.findAll()).thenReturn(toDoLists);
+        doReturn(toDoLists).when(toDoListService).findAll();
 
         // when
         mockMvc.perform(get("/api/v1/todolists"))
@@ -60,8 +58,7 @@ public class ToDoListRestControllerTest {
     @DisplayName("should return 404 if todolist is not found")
     void should_return_404_if_todolist_is_not_found() throws Exception {
         // given
-//        doReturn(null).when(toDoListService).findById(anyLong());
-        when(toDoListService.findById(anyLong())).thenReturn(null);
+        doReturn(null).when(toDoListService).findById(anyLong());
 
         // when
         mockMvc.perform(get("/api/v1/todolists/123"))
@@ -75,8 +72,7 @@ public class ToDoListRestControllerTest {
         // given
         String toDoListToCreateAsJson = "{\"title\": \"ToDoList\", \"description\":\"A ToDoList\"}";
         var toDoList = new ToDoList(123L, null, null);
-//        doReturn(toDoList).when(toDoListService).create(any());
-        when(toDoListService.create(any())).thenReturn(toDoList);
+        doReturn(toDoList).when(toDoListService).create(any());
 
         // when
         mockMvc.perform(
